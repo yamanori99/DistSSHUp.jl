@@ -60,6 +60,37 @@ function juliaup_align_host!(
     return (; host = h, channel = ch, already = false, ver = ver)
 end
 
+"""Installed patch of the juliaup default on `host`, or `-`.
+
+`parent` is this machine. Anything else is an SSH host. Missing juliaup, a
+failed `status`, or no Version column is `-`.
+"""
+function juliaup_default_patch(host::AbstractString)::String
+    h = String(host)
+    if DistSSHBase.is_parent_host_name(h)
+        ju = find_local_juliaup()
+        ju === nothing && return "-"
+        proc, out, _ = _juliaup_run_captured(ju, ["status"])
+        Int(something(proc.exitcode, 1)) == 0 || return "-"
+        return _juliaup_patch_from_status(out)
+    end
+    try
+        out_buf = IOBuffer()
+        proc = run(
+            pipeline(
+                ignorestatus(_host_sync_remote_shell_cmd(h, _juliaup_status_sh()));
+                stdout = out_buf,
+                stderr = devnull,
+            );
+            wait = true,
+        )
+        Int(something(proc.exitcode, 1)) == 0 || return "-"
+        return _juliaup_patch_from_status(String(take!(out_buf)))
+    catch
+        return "-"
+    end
+end
+
 """`juliaup update` on `parent` or one SSH host. Does not change the default."""
 function juliaup_update_host!(host::AbstractString)
     h = String(host)

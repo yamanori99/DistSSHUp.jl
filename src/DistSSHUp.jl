@@ -22,6 +22,7 @@ export julia_version_mismatch_kind
 export juliaup_align_host!
 export juliaup_align_local!
 export juliaup_channel
+export juliaup_default_patch
 export juliaup_parent_behind_channel
 export juliaup_update_host!
 export juliaup_update_local!

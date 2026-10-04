@@ -56,5 +56,33 @@
         withenv("DISTSSHKIT_TEST_SSH" => ssh) do
             @test_throws ErrorException DistSSHUp.juliaup_update_host!("host1")
         end
+
+        write(
+            ju,
+            """
+            #!/bin/sh
+            echo '     *  $ch     $ch.2+0.aarch64'
+            """,
+        )
+        withenv("DISTSSHKIT_TEST_LOCAL_JULIAUP" => ju) do
+            @test DistSSHUp.juliaup_default_patch("parent") == "$ch.2"
+        end
+        withenv("DISTSSHKIT_TEST_LOCAL_JULIAUP" => joinpath(d, "missing")) do
+            @test DistSSHUp.juliaup_default_patch("parent") == "-"
+        end
+
+        write(
+            ssh,
+            """
+            println("     *  1.13     1.13.2+0.aarch64.apple.darwin14")
+            """,
+        )
+        withenv("DISTSSHKIT_TEST_SSH" => ssh) do
+            @test DistSSHUp.juliaup_default_patch("host1") == "1.13.2"
+        end
+        write(ssh, "exit(1)\n")
+        withenv("DISTSSHKIT_TEST_SSH" => ssh) do
+            @test DistSSHUp.juliaup_default_patch("host1") == "-"
+        end
     end
 end
