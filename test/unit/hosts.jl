@@ -1,0 +1,60 @@
+@testset "parent and child" begin
+    mktempdir() do d
+        ju = joinpath(d, "juliaup")
+        jl = joinpath(d, "julia")
+        ch = "$(VERSION.major).$(VERSION.minor)"
+        write(
+            ju,
+            """
+            #!/bin/sh
+            case "\$1" in
+              status) echo '       *  $ch     julia version'; exit 0 ;;
+              update) exit 0 ;;
+              add|default) echo "unexpected \$1" >&2; exit 1 ;;
+              *) exit 1 ;;
+            esac
+            """,
+        )
+        write(
+            jl,
+            """
+            #!/bin/sh
+            echo "julia version $(VERSION.major).$(VERSION.minor).$(VERSION.patch)"
+            """,
+        )
+        chmod(ju, 0o755)
+        chmod(jl, 0o755)
+        withenv("DISTSSHKIT_TEST_LOCAL_JULIAUP" => ju) do
+            r = DistSSHUp.juliaup_align_host!("parent")
+            @test r.host == "parent"
+            @test r.already
+            @test r.channel == ch
+            DistSSHUp.juliaup_update_host!("parent")
+        end
+
+        ssh = joinpath(d, "ssh.jl")
+        write(
+            ssh,
+            """
+            println("already")
+            """,
+        )
+        withenv("DISTSSHKIT_TEST_SSH" => ssh) do
+            r = DistSSHUp.juliaup_align_host!("host1"; channel = ch)
+            @test r.host == "host1"
+            @test r.already
+            @test r.channel == ch
+        end
+
+        write(
+            ssh,
+            """
+            println(stderr, "juliaup not found (tried: juliaup)")
+            exit(1)
+            """,
+        )
+        withenv("DISTSSHKIT_TEST_SSH" => ssh) do
+            @test_throws ErrorException DistSSHUp.juliaup_update_host!("host1")
+        end
+    end
+end
