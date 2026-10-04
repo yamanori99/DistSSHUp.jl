@@ -11,7 +11,7 @@ projects = ["test"]
 DistSSHBase = "f0a69307-14e5-4272-8c28-20680d05bac8"
 
 [sources]
-DistSSHBase = {rev = "c126a3e8747c45377afad652c7ebc37913dc4e03", url = "https://github.com/yamanori99/DistSSHBase.jl"}
+DistSSHBase = {rev = "cc4d354c02bcb0ec1d28fec59479ad8dd0e5d93b", url = "https://github.com/yamanori99/DistSSHBase.jl"}
 
 [compat]
 DistSSHBase = "0.1"
