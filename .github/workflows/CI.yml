@@ -6,7 +6,6 @@ on:
 
 permissions:
   contents: read
-  actions: write
 
 jobs:
   test:
@@ -21,4 +20,6 @@ jobs:
         with:
           version: "1.13"
       - uses: julia-actions/cache@v3
+        with:
+          delete-old-caches: false
       - uses: julia-actions/julia-runtest@v1
