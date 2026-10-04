@@ -1,5 +1,5 @@
-# DistSSHUp
+# DistSSHUp.jl
 
-Align a host's Julia channel with juliaup: `add`, `update`, and `default`.
+DistSSHUp aligns a host's Julia channel with juliaup: `add`, `update`, and `default`.
 
-This package depends on DistSSHBase. It does not install juliaup, and it does not draw the DistSSHKit setup progress. Users add DistSSHKit. The DistSSHRun and DistSSHQueue branches `chore/try-base` hold this trial. It is not registered.
+Where juliaup lives is DistSSHBase. Setup progress and confirm text stay in DistSSHRun. Users add DistSSHKit. The DistSSHRun, DistSSHQueue, and DistSSHKit branches `trial/base-up` hold this trial. It is not registered.

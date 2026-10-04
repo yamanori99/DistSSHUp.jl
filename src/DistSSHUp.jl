@@ -1,7 +1,6 @@
 """
-DistSSHUp — align a DistSSHKit host's Julia channel with juliaup.
+DistSSHUp — juliaup `add` / `update` / `default` for a DistSSHKit host.
 
-`add`, `update`, and `default` for one channel, plus `juliaup status`.
 Where juliaup lives is DistSSHBase. Setup progress and confirm text stay in DistSSHRun.
 Users add DistSSHKit. This package is a trial and is not registered.
 """
