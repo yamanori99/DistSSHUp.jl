@@ -8,6 +8,8 @@ using Test
     @test occursin("update", sh) && occursin("default", sh)
     @test occursin("echo already", sh)
     @test occursin("\$1==\"*\"", sh)
+    @test occursin("--version", sh)
+    @test occursin("older than 1.22", sh)
     up_sh = DistSSHUp._juliaup_update_remote_sh()
     @test occursin(raw"$HOME/.juliaup/bin/juliaup", up_sh)
     @test occursin("\"\$JU\" update", up_sh)

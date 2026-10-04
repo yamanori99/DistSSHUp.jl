@@ -1,3 +1,12 @@
+"""Refuse this `juliaup` when `--version` is older than [`JULIAUP_MIN`](@ref)."""
+function _require_juliaup_version(ju::AbstractString)
+    proc, out, err = _juliaup_run_captured(ju, ["--version"])
+    seen = strip(out)
+    isempty(seen) && (seen = strip(err))
+    ver = proc.exitcode == 0 ? _juliaup_version(seen) : nothing
+    return _reject_old_juliaup(ver, seen)
+end
+
 """Run local `juliaup` with stdout and stderr captured."""
 function _juliaup_run_captured(
         ju::AbstractString,
@@ -51,6 +60,7 @@ function juliaup_align_local!(
     ju === nothing && error(
         "juliaup not found (tried: $(join(candidates, ", ")))",
     )
+    _require_juliaup_version(ju)
     if (ver = _juliaup_local_already_aligned(ju, ch)) !== nothing
         return (; ver, changed = false)
     end
@@ -108,6 +118,7 @@ function juliaup_update_local!(
     ju === nothing && error(
         "juliaup not found (tried: $(join(candidates, ", ")))",
     )
+    _require_juliaup_version(ju)
     proc, out_s, err_s = _juliaup_run_captured(ju, ["update"])
     proc.exitcode == 0 || error(_juliaup_captured_fail_msg(["update"], proc, out_s, err_s))
     return nothing
