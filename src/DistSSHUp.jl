@@ -1,8 +1,8 @@
 """
-DistSSHUp — juliaup `add` / `update` / `default` for a DistSSHKit host.
+DistSSHUp — juliaup `add` / `update` / `default` for a host.
 
 Where juliaup lives is DistSSHBase. Setup progress and confirm text stay in DistSSHRun.
-Users add DistSSHKit. This package is a trial and is not registered.
+Add this package directly. DistSSHKit users can run `julia -m DistSSHKit up`.
 """
 module DistSSHUp
 

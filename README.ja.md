@@ -10,27 +10,27 @@
 [![License](https://img.shields.io/badge/License-MIT-yellow?style=flat-square)](LICENSE)
 <!-- markdownlint-enable MD013 -->
 
-DistSSHUp aligns a host's Julia channel with juliaup: `add`, `update`, and `default`.
+DistSSHUp は、ホストの Julia チャンネルを juliaup の `add` / `update` / `default` で揃える。
 
-Add this package directly. [DistSSHKit](https://github.com/yamanori99/DistSSHKit.jl) users can run the same alignment with `julia -m DistSSHKit up`.
+このパッケージは直接足してよい。[DistSSHKit](https://github.com/yamanori99/DistSSHKit.jl) の利用者は、`julia -m DistSSHKit up` でも同じ揃えができる。
 
-Supported on **macOS, Linux, and WSL2 Ubuntu** (not native Windows).
+対応は **macOS、Linux、WSL2 Ubuntu** (ネイティブ Windows は対象外)。
 
-## Install
+## インストール
 
 ```julia
 pkg> add DistSSHUp
 ```
 
-Julia **1.13+**. The host needs **`ssh`** and **`juliaup`**.
+Julia **1.13+**。ホストには **`ssh`** と **`juliaup`** が要る。
 
 ```text
 julia -m DistSSHUp parent child:host1
 julia -m DistSSHUp update parent
 ```
 
-`parent` is this machine. `child:NAME` is SSH. `:N` is ignored. `update` runs `juliaup update` and leaves the default.
+`parent` はこのマシン。`child:NAME` は SSH。`:N` は無視する。`update` は `juliaup update` を実行し、default は変えない。
 
-## Documentation
+## ドキュメント
 
 <https://yamanori99.github.io/DistSSHUp.jl/stable/>

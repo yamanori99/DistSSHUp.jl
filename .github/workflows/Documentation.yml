@@ -1,0 +1,61 @@
+name: Docs
+
+on:
+  push:
+    branches:
+      - main
+    tags:
+      - v*
+  pull_request:
+  workflow_dispatch:
+
+concurrency:
+  group: docs-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ startsWith(github.ref, 'refs/pull/') }}
+
+jobs:
+  build:
+    name: Documenter - 1.13 - ubuntu-latest
+    # All deploys write gh-pages. Per-ref workflow concurrency does not cover that.
+    # queue: max keeps every pending deploy. The default (single) drops the
+    # older pending run when a third one arrives, so a tag or preview can skip.
+    concurrency:
+      group: docs-gh-pages
+      cancel-in-progress: false
+      queue: max
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    permissions:
+      # Documenter hosting template: push docs + report documenter/deploy status.
+      contents: write
+      statuses: write
+      actions: write
+      pull-requests: read
+    steps:
+      - uses: actions/checkout@v7
+      - uses: julia-actions/setup-julia@v3
+        with:
+          version: "1.13"
+      - uses: julia-actions/cache@v3
+        with:
+          cache-scratchspaces: false
+          delete-old-caches: false
+      - name: Install docs dependencies
+        run: |
+          julia --project=docs -e '
+            using Pkg
+            Pkg.Registry.add("General")
+            Pkg.instantiate()
+          '
+      - name: Doctests
+        run: |
+          julia --project=docs -e '
+            using Documenter, DistSSHUp, Test
+            DocMeta.setdocmeta!(DistSSHUp, :DocTestSetup, :(using DistSSHUp); recursive=true)
+            doctest(DistSSHUp)
+          '
+      - name: Build and deploy
+        env:
+          # Deploy via HTTPS + contents:write (no DOCUMENTER_KEY SSH secret required).
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: julia --project=docs --color=yes docs/make.jl

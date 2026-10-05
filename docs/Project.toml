@@ -1,0 +1,14 @@
+[deps]
+DistSSHBase = "f0a69307-14e5-4272-8c28-20680d05bac8"
+DistSSHUp = "76a6745a-cbcc-444e-a19a-dcac12a79e7c"
+Documenter = "e30172f5-a6a5-5a46-863b-614d45cd2de4"
+
+[sources]
+DistSSHBase = {rev = "cc4d354c02bcb0ec1d28fec59479ad8dd0e5d93b", url = "https://github.com/yamanori99/DistSSHBase.jl"}
+DistSSHUp = {path = ".."}
+
+[compat]
+DistSSHBase = "0.1"
+DistSSHUp = "0.1"
+Documenter = "1"
+julia = "1.13"
