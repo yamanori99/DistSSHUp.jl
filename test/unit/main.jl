@@ -78,18 +78,18 @@
             "DISTSSHKIT_TEST_LOCAL_JULIAUP" => ju,
             "DISTSSHKIT_TEST_SSH" => ssh,
         ) do
-            out_path, out_io = mktemp()
-            err_path, err_io = mktemp()
-            code = redirect_stdout(out_io) do
-                redirect_stderr(err_io) do
+            add_out_path, add_out_io = mktemp()
+            add_err_path, add_err_io = mktemp()
+            code = redirect_stdout(add_out_io) do
+                redirect_stderr(add_err_io) do
                     DistSSHUp.main(["add", "1.13", "parent", "child:host1"])
                 end
             end
-            close(out_io)
-            close(err_io)
+            close(add_out_io)
+            close(add_err_io)
             @test code == 1
-            @test occursin("parent: added 1.13", read(out_path, String))
-            @test occursin("host1: juliaup not found", read(err_path, String))
+            @test occursin("parent: added 1.13", read(add_out_path, String))
+            @test occursin("host1: juliaup not found", read(add_err_path, String))
 
             st_path, st_io = mktemp()
             st_code = redirect_stdout(st_io) do
