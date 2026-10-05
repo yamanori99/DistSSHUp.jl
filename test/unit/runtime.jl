@@ -43,24 +43,24 @@ function _write_ssh_double(
         found::Bool = true,
     )
     found_body = found ? """
-    if script == "uname -s"
-        println("Linux")
-    elseif startswith(script, "test -x")
-        occursin("/usr/bin/julia", script) && println("/usr/bin/julia")
-    elseif script == "command -v julia || which julia"
-        println("/usr/bin/julia")
-    elseif occursin("--version", script) && !occursin("echo already", script)
-        println($(repr(version_line)))
-    else
+        if script == "uname -s"
+            println("Linux")
+        elseif startswith(script, "test -x")
+            occursin("/usr/bin/julia", script) && println("/usr/bin/julia")
+        elseif script == "command -v julia || which julia"
+            println("/usr/bin/julia")
+        elseif occursin("--version", script) && !occursin("echo already", script)
+            println($(repr(version_line)))
+        else
+            println("ok")
+        end
+        """ : """
+        if script == "uname -s" || startswith(script, "test -x") ||
+                script == "command -v julia || which julia"
+            exit(1)
+        end
         println("ok")
-    end
-    """ : """
-    if script == "uname -s" || startswith(script, "test -x") ||
-            script == "command -v julia || which julia"
-        exit(1)
-    end
-    println("ok")
-    """
+        """
     write(
         path,
         """
