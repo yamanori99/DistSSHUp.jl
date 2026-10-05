@@ -50,4 +50,54 @@
     @test empty_code == 1
     @test occursin("add 1.13", read(empty_path, String))
     @test DistSSHBase.cli_entry() === :DistSSHKit
+
+    mktempdir() do d
+        ju = joinpath(d, "juliaup")
+        write(
+            ju,
+            """
+            #!/bin/sh
+            case "\$1" in
+              --version) echo 'Juliaup 1.22.7'; exit 0 ;;
+              status) echo '      1.13     1.13.2+0'; exit 0 ;;
+              add) exit 0 ;;
+              *) exit 1 ;;
+            esac
+            """,
+        )
+        chmod(ju, 0o755)
+        ssh = joinpath(d, "ssh.jl")
+        write(
+            ssh,
+            """
+            println(stderr, "juliaup not found")
+            exit(1)
+            """,
+        )
+        withenv(
+            "DISTSSHKIT_TEST_LOCAL_JULIAUP" => ju,
+            "DISTSSHKIT_TEST_SSH" => ssh,
+        ) do
+            out_path, out_io = mktemp()
+            err_path, err_io = mktemp()
+            code = redirect_stdout(out_io) do
+                redirect_stderr(err_io) do
+                    DistSSHUp.main(["add", "1.13", "parent", "child:host1"])
+                end
+            end
+            close(out_io)
+            close(err_io)
+            @test code == 1
+            @test occursin("parent: added 1.13", read(out_path, String))
+            @test occursin("host1: juliaup not found", read(err_path, String))
+
+            st_path, st_io = mktemp()
+            st_code = redirect_stdout(st_io) do
+                DistSSHUp.main(["status", "1.13", "parent"])
+            end
+            close(st_io)
+            @test st_code == 0
+            @test occursin("parent: 1.13", read(st_path, String))
+        end
+    end
 end

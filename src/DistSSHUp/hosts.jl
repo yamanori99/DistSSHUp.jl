@@ -126,15 +126,21 @@ function juliaup_add_host!(host::AbstractString, channel::AbstractString)
     return (; host = h, channel = ch)
 end
 
-"""`juliaup default` on `parent` or one SSH host. A missing channel fails."""
+"""`juliaup default` on `parent` or one SSH host.
+
+A missing channel fails. Success drops the cached Julia path for that host,
+so the next lookup sees the new default.
+"""
 function juliaup_default_host!(host::AbstractString, channel::AbstractString)
     h = String(host)
     ch = String(channel)
     if DistSSHBase.is_parent_host_name(h)
         juliaup_default_local!(ch)
+        DistSSHBase.clear_detect_julia_path_cache!(DistSSHBase.PARENT_HOST_NAME)
         return (; host = DistSSHBase.PARENT_HOST_NAME, channel = ch)
     end
     _juliaup_remote_capture(h, _juliaup_default_remote_sh(ch))
+    DistSSHBase.clear_detect_julia_path_cache!(h)
     return (; host = h, channel = ch)
 end
 

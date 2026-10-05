@@ -35,7 +35,7 @@ julia -m DistSSHUp status parent
 julia -m DistSSHUp status 1.13 parent
 ```
 
-`add` はチャネルを入れる。`default` はそこへ切り替える。チャネル無しの `update` は、入っているチャネルを全部更新する。`status` は入っているチャネルだけを出す。`parent` はこのマシン。`child:NAME` は SSH。`:N` は無視する。
+`add` はチャネルを入れる。`default` はそこへ切り替える。チャネル無しの `update` は、入っているチャネルを全部更新し、デフォルトは変えない。`status` は入っているチャネルだけを出す。`parent` はこのマシン。`child:NAME` は SSH。`:N` は無視する。
 
 ## ドキュメント
 

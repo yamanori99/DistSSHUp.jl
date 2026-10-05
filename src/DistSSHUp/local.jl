@@ -91,8 +91,6 @@ function juliaup_align_local!(
     return (; ver, changed = true)
 end
 
-const _juliaup_align_local! = juliaup_align_local!
-
 """Parse a remote Julia version over SSH."""
 function _remote_julia_version_setup_ssh(
         host::AbstractString,
@@ -123,9 +121,6 @@ function juliaup_update_local!(
     proc.exitcode == 0 || error(_juliaup_captured_fail_msg(["update"], proc, out_s, err_s))
     return nothing
 end
-
-const _juliaup_update_local! = juliaup_update_local!
-
 
 """Run local `juliaup add`. An already installed channel is success."""
 function juliaup_add_local!(
