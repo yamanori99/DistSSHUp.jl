@@ -28,7 +28,7 @@ using Test
         chmod(ju, 0o755)
         chmod(jl, 0o755)
         withenv("DISTSSHKIT_TEST_LOCAL_JULIAUP" => ju) do
-            @test DistSSHUp.find_local_juliaup() == ju
+            @test DistSSHBase.find_local_juliaup() == ju
             ch = "$(VERSION.major).$(VERSION.minor)"
             r = nothing
             captured = mktemp() do path, io
