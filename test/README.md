@@ -11,7 +11,7 @@ From the package root:
 julia --project=. -e 'using Pkg; Pkg.test()'
 ```
 
-That is `test/runtests.jl`. Aqua is a separate CI job, not `Pkg.test()`.
+That is `test/runtests.jl`. `test/unit/runtime.jl` locks the runtime contract the rest of the family calls: `add` and `update` do not change the default, a failed `update` does not run `default`, and a finished align checks the Julia version. Aqua is a separate CI job, not `Pkg.test()`.
 
 Real SSH (not part of `Pkg.test()`):
 

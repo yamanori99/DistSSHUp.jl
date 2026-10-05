@@ -25,6 +25,15 @@
     @test_throws ArgumentError DistSSHUp._parse_command(["add", "parent"])
     @test_throws ArgumentError DistSSHUp._parse_command(["default"])
     @test_throws ArgumentError DistSSHUp._parse_command(["status"])
+    @test_throws ArgumentError DistSSHUp._parse_command(["update", "1.13"])
+    @test_throws ArgumentError DistSSHUp._parse_command(["add", "1.13", "parent", "--yes"])
+    @test_throws ArgumentError DistSSHUp._parse_command(["status", "parent", "nope"])
+    collapsed = DistSSHUp._parse_command(["status", "parent", "parent:4", "child:h", "child:h:2"])
+    @test collapsed.channel === nothing
+    @test collapsed.hosts == ["parent", "h"]
+    nightly = DistSSHUp._parse_command(["status", "nightly", "child:h"])
+    @test nightly.channel == "nightly"
+    @test nightly.hosts == ["h"]
 
     ver_path, ver_io = mktemp()
     ver_code = redirect_stdout(ver_io) do
