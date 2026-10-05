@@ -28,4 +28,14 @@ julia -m DistSSHUp status parent
 julia -m DistSSHUp status 1.13 parent
 ```
 
-`add` installs a channel. `default` switches to it. `update` with no channel updates every installed channel. `status` prints installed channels. `parent` is this machine. `child:NAME` is SSH. `:N` is ignored.
+`add` installs a channel. `default` switches to it. `update` with no channel updates every installed channel and does not change the default. `status` prints installed channels. `parent` is this machine. `child:NAME` is SSH. `:N` is ignored.
+
+```jldoctest
+julia> using DistSSHUp
+
+julia> juliaup_channel(v"1.13.2")
+"1.13"
+
+julia> julia_version_mismatch_kind(v"1.13.2", v"1.13.5")
+:patch
+```
