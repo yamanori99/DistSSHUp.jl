@@ -77,3 +77,47 @@ function _juliaup_update_remote_sh(
     echo ok
     """
 end
+
+"""SSH body: `juliaup add` `channel`. Already installed counts as success."""
+function _juliaup_add_remote_sh(
+        channel::AbstractString;
+        candidates::Vector{String} = remote_juliaup_candidates(),
+    )::String
+    cq = _remote_sh_quote(String(channel))
+    return """
+    $(_juliaup_locate_sh(candidates))
+    if ! \"\$JU\" add $cq; then
+      if ! \"\$JU\" status 2>/dev/null | grep -F -q $cq; then
+        printf 'juliaup add %s failed\\n' $cq >&2
+        exit 1
+      fi
+    fi
+    echo ok
+    """
+end
+
+"""SSH body: `juliaup default` `channel`. Missing channel fails."""
+function _juliaup_default_remote_sh(
+        channel::AbstractString;
+        candidates::Vector{String} = remote_juliaup_candidates(),
+    )::String
+    cq = _remote_sh_quote(String(channel))
+    return """
+    $(_juliaup_locate_sh(candidates))
+    \"\$JU\" default $cq || exit \$?
+    echo ok
+    """
+end
+
+"""SSH body: `juliaup update` for one channel. Does not `default`."""
+function _juliaup_update_channel_remote_sh(
+        channel::AbstractString;
+        candidates::Vector{String} = remote_juliaup_candidates(),
+    )::String
+    cq = _remote_sh_quote(String(channel))
+    return """
+    $(_juliaup_locate_sh(candidates))
+    \"\$JU\" update $cq || exit \$?
+    echo ok
+    """
+end

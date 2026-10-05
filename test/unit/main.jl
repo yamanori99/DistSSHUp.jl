@@ -7,22 +7,24 @@
     help = read(help_path, String)
     @test help_code == 0
     @test occursin("DistSSHUp\n", help)
-    @test occursin("julia -m DistSSHUp parent", help)
-    @test occursin("child:host1", help)
-    @test occursin("julia -m DistSSHUp update", help)
+    @test occursin("julia -m DistSSHUp add 1.13 parent", help)
+    @test occursin("default 1.13", help)
+    @test occursin("update 1.13 child:host1", help)
+    @test occursin("status parent", help)
     @test !occursin("qhost", help)
 
-    update_path, update_io = mktemp()
-    update_code = redirect_stdout(update_io) do
-        DistSSHUp.main(["update", "-h"])
-    end
-    close(update_io)
-    update_help = read(update_path, String)
-    @test update_code == 0
-    @test occursin("DistSSHUp update\n", update_help)
-    @test occursin("julia -m DistSSHUp update parent", update_help)
-    @test occursin("update child:host1", update_help)
-    @test !occursin("qhost", update_help)
+    parsed = DistSSHUp._parse_command(["update", "child:host1"])
+    @test parsed.verb == "update"
+    @test parsed.channel === nothing
+    @test parsed.hosts == ["host1"]
+    parsed = DistSSHUp._parse_command(["update", "1.13", "parent", "child:host1:2"])
+    @test parsed.channel == "1.13"
+    @test parsed.hosts == ["parent", "host1"]
+    parsed = DistSSHUp._parse_command(["add", "release", "parent"])
+    @test parsed.verb == "add" && parsed.channel == "release"
+    @test_throws ArgumentError DistSSHUp._parse_command(["add", "parent"])
+    @test_throws ArgumentError DistSSHUp._parse_command(["default"])
+    @test_throws ArgumentError DistSSHUp._parse_command(["status"])
 
     ver_path, ver_io = mktemp()
     ver_code = redirect_stdout(ver_io) do
@@ -46,6 +48,6 @@
     end
     close(empty_io)
     @test empty_code == 1
-    @test occursin("parent", read(empty_path, String))
+    @test occursin("add 1.13", read(empty_path, String))
     @test DistSSHBase.cli_entry() === :DistSSHKit
 end

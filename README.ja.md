@@ -27,11 +27,14 @@ pkg> add DistSSHUp
 Julia **1.13+**。ホストには **`ssh`** と **`juliaup`** が要る。
 
 ```text
-julia -m DistSSHUp parent child:host1
+julia -m DistSSHUp add 1.13 parent child:host1
+julia -m DistSSHUp default 1.13 parent
 julia -m DistSSHUp update parent
+julia -m DistSSHUp update 1.13 child:host1
+julia -m DistSSHUp status parent
 ```
 
-`parent` はこのマシン。`child:NAME` は SSH。`:N` は無視する。`update` は `juliaup update` を実行し、default は変えない。
+`add` はチャネルを入れる。`default` はそこへ切り替える。チャネル無しの `update` は、入っているチャネルを全部更新する。`status` は入っているチャネルだけを出す。`parent` はこのマシン。`child:NAME` は SSH。`:N` は無視する。
 
 ## ドキュメント
 

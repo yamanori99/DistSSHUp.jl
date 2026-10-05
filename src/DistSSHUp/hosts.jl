@@ -91,13 +91,71 @@ function juliaup_default_patch(host::AbstractString)::String
     end
 end
 
-"""`juliaup update` on `parent` or one SSH host. Does not change the default."""
-function juliaup_update_host!(host::AbstractString)
+"""`juliaup update` on `parent` or one SSH host. Does not change the default.
+
+`channel === nothing` updates every installed channel. A channel updates that one.
+"""
+function juliaup_update_host!(
+        host::AbstractString;
+        channel::Union{Nothing, AbstractString} = nothing,
+    )
     h = String(host)
+    ch = channel === nothing ? nothing : String(channel)
     if DistSSHBase.is_parent_host_name(h)
-        juliaup_update_local!()
+        if ch === nothing
+            juliaup_update_local!()
+        else
+            juliaup_update_local!(ch)
+        end
         return (; host = DistSSHBase.PARENT_HOST_NAME)
     end
-    _juliaup_remote_capture(h, _juliaup_update_remote_sh())
+    script = ch === nothing ? _juliaup_update_remote_sh() : _juliaup_update_channel_remote_sh(ch)
+    _juliaup_remote_capture(h, script)
     return (; host = h)
+end
+
+"""`juliaup add` on `parent` or one SSH host. Does not change the default."""
+function juliaup_add_host!(host::AbstractString, channel::AbstractString)
+    h = String(host)
+    ch = String(channel)
+    if DistSSHBase.is_parent_host_name(h)
+        juliaup_add_local!(ch)
+        return (; host = DistSSHBase.PARENT_HOST_NAME, channel = ch)
+    end
+    _juliaup_remote_capture(h, _juliaup_add_remote_sh(ch))
+    return (; host = h, channel = ch)
+end
+
+"""`juliaup default` on `parent` or one SSH host. A missing channel fails."""
+function juliaup_default_host!(host::AbstractString, channel::AbstractString)
+    h = String(host)
+    ch = String(channel)
+    if DistSSHBase.is_parent_host_name(h)
+        juliaup_default_local!(ch)
+        return (; host = DistSSHBase.PARENT_HOST_NAME, channel = ch)
+    end
+    _juliaup_remote_capture(h, _juliaup_default_remote_sh(ch))
+    return (; host = h, channel = ch)
+end
+
+"""Installed `juliaup status` rows on `host`. Optional `channel` keeps that row."""
+function juliaup_status_lines(
+        host::AbstractString;
+        channel::Union{Nothing, AbstractString} = nothing,
+    )::Vector{String}
+    h = String(host)
+    ch = channel === nothing ? nothing : String(channel)
+    if DistSSHBase.is_parent_host_name(h)
+        ju = find_local_juliaup()
+        ju === nothing && return String[]
+        proc, out, _ = _juliaup_run_captured(ju, ["status"])
+        Int(something(proc.exitcode, 1)) == 0 || return String[]
+        return _installed_status_lines(out; channel = ch)
+    end
+    try
+        out = _juliaup_remote_capture(h, _juliaup_status_sh())
+        return _installed_status_lines(out; channel = ch)
+    catch
+        return String[]
+    end
 end

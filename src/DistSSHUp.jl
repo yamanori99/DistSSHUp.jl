@@ -19,11 +19,14 @@ import DistSSHBase:
     remote_juliaup_candidates
 
 export julia_version_mismatch_kind
+export juliaup_add_host!
 export juliaup_align_host!
 export juliaup_align_local!
 export juliaup_channel
+export juliaup_default_host!
 export juliaup_default_patch
 export juliaup_parent_behind_channel
+export juliaup_status_lines
 export juliaup_update_host!
 export juliaup_update_local!
 

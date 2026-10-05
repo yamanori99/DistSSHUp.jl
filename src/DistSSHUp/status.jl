@@ -49,3 +49,26 @@ function _juliaup_status_sh()::String
     \"\$JU\" status 2>/dev/null
     """
 end
+
+"""Installed rows of `juliaup status`. Header and rule lines are dropped."""
+function _installed_status_lines(
+        status_out::AbstractString;
+        channel::Union{Nothing, AbstractString} = nothing,
+    )::Vector{String}
+    want = channel === nothing ? nothing : String(channel)
+    lines = String[]
+    for line in eachsplit(String(status_out), '\n'; keepempty = false)
+        s = strip(line)
+        isempty(s) && continue
+        startswith(s, "Default") && continue
+        startswith(s, "-") && continue
+        if want !== nothing
+            parts = split(s)
+            startswith(s, "*") && (parts = parts[2:end])
+            isempty(parts) && continue
+            String(parts[1]) == want || continue
+        end
+        push!(lines, s)
+    end
+    return lines
+end

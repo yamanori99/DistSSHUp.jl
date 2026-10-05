@@ -125,3 +125,57 @@ function juliaup_update_local!(
 end
 
 const _juliaup_update_local! = juliaup_update_local!
+
+
+"""Run local `juliaup add`. An already installed channel is success."""
+function juliaup_add_local!(
+        channel::AbstractString;
+        candidates::Vector{String} = local_juliaup_candidates(),
+    )
+    ch = String(channel)
+    ju = find_local_juliaup(candidates)
+    ju === nothing && error(
+        "juliaup not found (tried: $(join(candidates, ", ")))",
+    )
+    _require_juliaup_version(ju)
+    add, add_out, add_err = _juliaup_run_captured(ju, ["add", ch])
+    if add.exitcode != 0
+        _, st, _ = _juliaup_run_captured(ju, ["status"])
+        occursin(ch, st) || error(
+            _juliaup_captured_fail_msg(["add", ch], add, add_out, add_err),
+        )
+    end
+    return nothing
+end
+
+"""Run local `juliaup default`. A missing channel fails."""
+function juliaup_default_local!(
+        channel::AbstractString;
+        candidates::Vector{String} = local_juliaup_candidates(),
+    )
+    ch = String(channel)
+    ju = find_local_juliaup(candidates)
+    ju === nothing && error(
+        "juliaup not found (tried: $(join(candidates, ", ")))",
+    )
+    _require_juliaup_version(ju)
+    proc, out_s, err_s = _juliaup_run_captured(ju, ["default", ch])
+    proc.exitcode == 0 || error(_juliaup_captured_fail_msg(["default", ch], proc, out_s, err_s))
+    return nothing
+end
+
+"""Run local `juliaup update` for one channel."""
+function juliaup_update_local!(
+        channel::AbstractString;
+        candidates::Vector{String} = local_juliaup_candidates(),
+    )
+    ch = String(channel)
+    ju = find_local_juliaup(candidates)
+    ju === nothing && error(
+        "juliaup not found (tried: $(join(candidates, ", ")))",
+    )
+    _require_juliaup_version(ju)
+    proc, out_s, err_s = _juliaup_run_captured(ju, ["update", ch])
+    proc.exitcode == 0 || error(_juliaup_captured_fail_msg(["update", ch], proc, out_s, err_s))
+    return nothing
+end

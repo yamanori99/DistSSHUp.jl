@@ -1,5 +1,5 @@
 #!/usr/bin/env julia
-# Real SSH for juliaup align. Not part of Pkg.test().
+# Real SSH for juliaup status and default. Not part of Pkg.test().
 #
 #   testenv/docker-ssh/scripts/up.sh --e2e
 #   DISTSSHKIT_SSH_E2E=1 julia --project=. test/e2e.jl
@@ -19,9 +19,13 @@ isfile(_ssh_config) ||
 
 @testset "DistSSHUp SSH" verbose = true begin
     withenv("DISTRIBUTED_SSH_OPTS" => "-F $(_ssh_config) -o RequestTTY=no") do
-        aligned = juliaup_align_host!("child-1")
-        @test aligned.host == "child-1"
-        @test aligned.channel == juliaup_channel()
-        @test aligned.already isa Bool
+        ch = juliaup_channel()
+        lines = juliaup_status_lines("child-1")
+        @test !isempty(lines)
+        switched = juliaup_default_host!("child-1", ch)
+        @test switched.host == "child-1"
+        @test switched.channel == ch
+        again = juliaup_status_lines("child-1"; channel = ch)
+        @test !isempty(again)
     end
 end
