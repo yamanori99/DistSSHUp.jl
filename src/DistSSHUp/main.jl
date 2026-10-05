@@ -1,4 +1,4 @@
-# `julia -m DistSSHUp parent child:host`. Confirm text and progress stay in DistSSHRun.
+# `julia -m DistSSHUp` takes `add`, `default`, `update`, or `status`. Confirm text and progress stay in DistSSHRun.
 
 function _pkg_version()::String
     root = pkgdir(DistSSHUp)

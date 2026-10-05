@@ -12,7 +12,7 @@
 [![License](https://img.shields.io/badge/License-MIT-yellow?style=flat-square)](LICENSE)
 <!-- markdownlint-enable MD013 -->
 
-DistSSHUp aligns a host's Julia channel with juliaup: `add`, `update`, and `default`.
+DistSSHUp aligns a host's Julia channel with juliaup: `add`, `default`, `update`, and `status`.
 
 Add this package directly. [DistSSHKit](https://github.com/yamanori99/DistSSHKit.jl) users can run the same alignment with `julia -m DistSSHKit up`.
 
@@ -32,6 +32,7 @@ julia -m DistSSHUp default 1.13 parent
 julia -m DistSSHUp update parent
 julia -m DistSSHUp update 1.13 child:host1
 julia -m DistSSHUp status parent
+julia -m DistSSHUp status 1.13 parent
 ```
 
 `add` installs a channel. `default` switches to it. `update` with no channel updates every installed channel. `status` prints installed channels. `parent` is this machine. `child:NAME` is SSH. `:N` is ignored.

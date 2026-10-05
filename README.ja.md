@@ -12,7 +12,7 @@
 [![License](https://img.shields.io/badge/License-MIT-yellow?style=flat-square)](LICENSE)
 <!-- markdownlint-enable MD013 -->
 
-DistSSHUp は、ホストの Julia チャンネルを juliaup の `add` / `update` / `default` で揃える。
+DistSSHUp は、ホストの Julia チャンネルを juliaup の `add` / `default` / `update` / `status` で揃える。
 
 このパッケージは直接足してよい。[DistSSHKit](https://github.com/yamanori99/DistSSHKit.jl) の利用者は、`julia -m DistSSHKit up` でも同じ揃えができる。
 
@@ -32,6 +32,7 @@ julia -m DistSSHUp default 1.13 parent
 julia -m DistSSHUp update parent
 julia -m DistSSHUp update 1.13 child:host1
 julia -m DistSSHUp status parent
+julia -m DistSSHUp status 1.13 parent
 ```
 
 `add` はチャネルを入れる。`default` はそこへ切り替える。チャネル無しの `update` は、入っているチャネルを全部更新する。`status` は入っているチャネルだけを出す。`parent` はこのマシン。`child:NAME` は SSH。`:N` は無視する。

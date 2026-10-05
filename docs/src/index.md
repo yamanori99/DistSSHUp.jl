@@ -4,7 +4,7 @@
 CurrentModule = DistSSHUp
 ```
 
-Align a host's Julia channel with juliaup: `add`, `update`, and `default`.
+Align a host's Julia channel with juliaup: `add`, `default`, `update`, and `status`.
 
 Add DistSSHUp directly. DistSSHKit users can run the same alignment with `julia -m DistSSHKit up`.
 
@@ -23,7 +23,9 @@ Julia 1.13 or later. The host needs `ssh` and `juliaup`. Supported on macOS, Lin
 julia -m DistSSHUp add 1.13 parent child:host1
 julia -m DistSSHUp default 1.13 parent
 julia -m DistSSHUp update parent
+julia -m DistSSHUp update 1.13 child:host1
 julia -m DistSSHUp status parent
+julia -m DistSSHUp status 1.13 parent
 ```
 
 `add` installs a channel. `default` switches to it. `update` with no channel updates every installed channel. `status` prints installed channels. `parent` is this machine. `child:NAME` is SSH. `:N` is ignored.
