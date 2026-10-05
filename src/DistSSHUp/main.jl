@@ -77,13 +77,18 @@ function _run_command(parsed)::Cint
     failed = false
     for host in parsed.hosts
         try
-            if parsed.verb == "add"
-                juliaup_add_host!(host, parsed.channel)
-                println("$host: added $(parsed.channel)")
-            elseif parsed.verb == "default"
-                juliaup_default_host!(host, parsed.channel)
-                println("$host: default $(parsed.channel)")
-            elseif parsed.verb == "update"
+            verb = parsed.verb
+            channel = parsed.channel
+            if verb == "add" || verb == "default"
+                channel === nothing && error("$verb needs a channel")
+                if verb == "add"
+                    juliaup_add_host!(host, channel)
+                    println("$host: added $channel")
+                else
+                    juliaup_default_host!(host, channel)
+                    println("$host: default $channel")
+                end
+            elseif verb == "update"
                 juliaup_update_host!(host; channel = parsed.channel)
                 if parsed.channel === nothing
                     println("$host: updated")
