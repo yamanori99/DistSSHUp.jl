@@ -24,7 +24,9 @@ function _juliaup_version(text::AbstractString)::Union{Nothing, VersionNumber}
     end
     m = match(r"^Juliaup\s+(\d+\.\d+(?:\.\d+)?)\b", line)
     m === nothing && return nothing
-    return VersionNumber(String(m.captures[1]))
+    cap = m.captures[1]
+    cap === nothing && return nothing
+    return VersionNumber(String(cap))
 end
 
 """Error when `ver` is missing or older than [`JULIAUP_MIN`](@ref)."""

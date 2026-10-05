@@ -14,8 +14,27 @@ concurrency:
   cancel-in-progress: ${{ startsWith(github.ref, 'refs/pull/') }}
 
 jobs:
+  detect:
+    name: detect
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: read
+      pull-requests: read
+    outputs:
+      heavy: ${{ steps.heavy.outputs.heavy }}
+      docs: ${{ steps.heavy.outputs.docs }}
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - uses: ./.github/actions/ci-heavy
+        id: heavy
+
   build:
     name: Documenter - 1.13 - ubuntu-latest
+    needs: detect
+    if: github.event_name != 'pull_request' || needs.detect.outputs.heavy == 'true' || needs.detect.outputs.docs == 'true'
     # All deploys write gh-pages. Per-ref workflow concurrency does not cover that.
     # queue: max keeps every pending deploy. The default (single) drops the
     # older pending run when a third one arrives, so a tag or preview can skip.

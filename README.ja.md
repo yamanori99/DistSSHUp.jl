@@ -4,6 +4,7 @@
 
 <!-- markdownlint-disable MD013 -->
 [![Test](https://img.shields.io/github/actions/workflow/status/yamanori99/DistSSHUp.jl/CI.yml?branch=main&style=flat-square&logo=githubactions&logoColor=white&label=Test)](https://github.com/yamanori99/DistSSHUp.jl/actions/workflows/CI.yml)
+[![Codecov](https://img.shields.io/codecov/c/github/yamanori99/DistSSHUp.jl?style=flat-square&logo=codecov&logoColor=white)](https://codecov.io/gh/yamanori99/DistSSHUp.jl)
 [![docs-stable](https://img.shields.io/badge/docs-stable-blue?style=flat-square&logo=gitbook&logoColor=white)](https://yamanori99.github.io/DistSSHUp.jl/stable/)
 [![docs-dev](https://img.shields.io/badge/docs-dev-blue?style=flat-square&logo=gitbook&logoColor=white)](https://yamanori99.github.io/DistSSHUp.jl/dev/)
 [![Julia 1.13+](https://img.shields.io/badge/Julia-1.13+-9558B2?style=flat-square&logo=julia&logoColor=white)](https://yamanori99.github.io/DistSSHKit.jl/stable/requirements/)

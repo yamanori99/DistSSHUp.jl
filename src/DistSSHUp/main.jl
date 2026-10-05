@@ -1,9 +1,14 @@
 # `julia -m DistSSHUp parent child:host`. Confirm text and progress stay in DistSSHRun.
 
 function _pkg_version()::String
-    for line in eachline(joinpath(pkgdir(DistSSHUp), "Project.toml"))
+    root = pkgdir(DistSSHUp)
+    root === nothing && return "0.1.0"
+    for line in eachline(joinpath(root, "Project.toml"))
         m = match(r"^version\s*=\s*\"([^\"]+)\"", line)
-        m === nothing || return String(m.captures[1])
+        m === nothing && continue
+        cap = m.captures[1]
+        cap === nothing && continue
+        return String(cap)
     end
     return "0.1.0"
 end

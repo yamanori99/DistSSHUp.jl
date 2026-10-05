@@ -30,16 +30,17 @@ using Test
         withenv("DISTSSHKIT_TEST_LOCAL_JULIAUP" => ju) do
             @test DistSSHBase.find_local_juliaup() == ju
             ch = "$(VERSION.major).$(VERSION.minor)"
-            r = nothing
+            holder = Ref{Any}()
             captured = mktemp() do path, io
                 redirect_stdout(io) do
                     redirect_stderr(io) do
-                        r = DistSSHUp.juliaup_align_local!(ch)
+                        holder[] = DistSSHUp.juliaup_align_local!(ch)
                     end
                 end
                 flush(io)
                 return read(path, String)
             end
+            r = holder[]
             @test r.changed
             @test DistSSHUp.julia_version_mismatch_kind(VERSION, r.ver) != :minor
             @test !occursin("Checking for new Julia versions", captured)

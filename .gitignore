@@ -1,3 +1,4 @@
 Manifest.toml
 *.ji
 .DS_Store
+docs/build/
