@@ -1,6 +1,6 @@
 # Contributing
 
-DistSSHUp aligns a host's Julia channel with juliaup: `add`, `update`, and `default`. Users add this package directly. The manual for them is the README. This file is for people changing the repo.
+DistSSHUp aligns a host's Julia channel with juliaup: `add`, `default`, `update`, and `status`. Users add this package directly. The manual for them is the README. This file is for people changing the repo.
 
 Julia 1.13 or later, on macOS, Linux, or WSL2 Ubuntu. Not native Windows. How you install Julia is up to you. 1.13 is the floor in `.github/julia-slots.env`.
 

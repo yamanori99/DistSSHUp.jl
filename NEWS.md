@@ -10,6 +10,6 @@ GitHub Releases may copy these sections (`Release notes:` on
 
 First release. Julia **1.13+**.
 
-- Align a host's Julia channel with juliaup: `add`, `update`, and `default`.
+- Align a host's Julia channel with juliaup: `add`, `default`, `update`, and `status`.
 - Add DistSSHUp directly. DistSSHKit users can run `julia -m DistSSHKit up`.
-- `julia -m DistSSHUp parent child:host1` aligns. `julia -m DistSSHUp update parent` runs `juliaup update` and leaves the default.
+- `add` installs a channel. `default` switches to it. `update` with no channel updates every installed channel and does not change the default. `status` prints installed channels.

@@ -19,4 +19,4 @@ Real SSH (not part of `Pkg.test()`):
 ./testenv/docker-ssh/scripts/up.sh --e2e
 ```
 
-`test/e2e.jl` aligns `child-1` with `juliaup_align_host!`. Details: [`testenv/docker-ssh/README.md`](../testenv/docker-ssh/README.md).
+`test/e2e.jl` reads `juliaup_status_lines` for `child-1`, switches that host with `juliaup_default_host!`, then reads status again for that channel. Details: [`testenv/docker-ssh/README.md`](../testenv/docker-ssh/README.md).
