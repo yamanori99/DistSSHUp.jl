@@ -63,6 +63,6 @@ CodeRabbit may comment. It is not a merge gate. The config is `.coderabbit.yaml`
 
 ## Release
 
-`breaking` means incompatible behavior and can land without a version bump. A version cut is a higher `version` in `Project.toml`. There is no `cut` label. CI compares the file with the base.
+`breaking` means incompatible behavior and can land without a version bump. A version cut is a higher `version` in `Project.toml`. Labels adds `cut` when that rises above the base. Removing it sticks until the next rise. CI still reads the file, not the label.
 
 On a breaking line, bump `x` in `0.x.y`. Otherwise bump `y`. Do not ship an empty cut, and do not automate the bump or `@JuliaRegistrator register`. Cut when `NEWS.md` under Unreleased has something General users of this package should get.
