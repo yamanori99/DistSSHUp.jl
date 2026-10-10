@@ -37,15 +37,15 @@ The `main` ruleset asks for these checks:
 - `ubuntu-latest → ubuntu-24.04`
 - `PR label`
 
-`ubuntu-latest → ubuntu-24.04` is a Linux runner talking to SSH workers built from `ubuntu:24.04`. Markdown-only edits skip the heavy jobs. The skip list lives in `.github/actions/ci-heavy/action.yml`. A `Project.toml` version increase does not skip them.
+`ubuntu-latest → ubuntu-24.04` is a Linux runner talking to SSH workers built from `ubuntu:24.04`. Markdown-only edits skip the heavy jobs. The skip list lives in `.github/actions/ci-heavy/action.yml`. A version-increase PR does not skip them. A main push that changes only `Project.toml` and `NEWS.md` skips Test and does not start E2E weekly.
 
 Runic is not required. Once a month on `main` it opens `Runic monthly failed` if `--check` is red. Codecov status is informational. Flag `pkgtest` uploads from `Pkg.test` on a push to `main` only. Flag `e2e` uploads from Linux E2E on E2E weekly and on a version-increase PR. Ordinary PR E2E does not upload.
 
-Ubuntu `Pkg.test` and Aqua on 1.14-nightly run on a push, a manual run, or a version increase. macOS and WSL2 nightly run on CI weekly only. `Pkg.test (registry, ubuntu-latest, x64)` runs then too. They continue on error and are not required. JETLS stays on 1.13. `Pkg.test` 1.13 on macOS and WSL2 is required, with Ubuntu.
+Ubuntu `Pkg.test` and Aqua on 1.14-nightly run on a push, a manual run, or a version-increase PR. A main push that changes only `Project.toml` and `NEWS.md` skips them. macOS and WSL2 nightly run on CI weekly only. `Pkg.test (registry, ubuntu-latest, x64)` runs then too. They continue on error and are not required. JETLS stays on 1.13. `Pkg.test` 1.13 on macOS and WSL2 is required, with Ubuntu.
 
 Sunday 10:00 JST, CI weekly repeats the 1.13 checks, including macOS and WSL2, and those nightly jobs. A failure of a 1.13 job opens `CI weekly failed`. Nightly failures do not. That run also drops old Actions caches.
 
-Sunday 04:00 JST, a manual run, or a version increase on `main` builds the worker image and runs the suite on that image from Linux, macOS Intel, and WSL2. Those jobs are not required. The Linux job uploads flag `e2e`. `distsshup-linux-ssh-worker:latest` is published after that Linux suite. A failure opens `E2E weekly failed`. A red Linux job after a version increase adds `cut-hold`. Intel and WSL do not.
+Sunday 04:00 JST or a manual run builds the worker image and runs the suite on that image from Linux, macOS Intel, and WSL2. Those jobs are not required. The Linux job uploads flag `e2e`. `distsshup-linux-ssh-worker:latest` is published after that Linux suite. A failure opens `E2E weekly failed`. A red Linux job on the Sunday run adds `cut-hold`. Intel and WSL do not.
 
 The Julia floor is the `1.13` line in `.github/julia-slots.env`. When it moves, rename the jobs and the ruleset in the same PR.
 
