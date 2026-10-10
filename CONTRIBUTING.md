@@ -41,7 +41,7 @@ The `main` ruleset asks for these checks:
 
 Runic is not required. Once a month on `main` it opens `Runic monthly failed` if `--check` is red. Codecov status is informational. Flag `pkgtest` uploads from `Pkg.test` on a push to `main` only. Flag `e2e` uploads from Linux E2E on E2E weekly and on a version-increase PR. Ordinary PR E2E does not upload.
 
-`Pkg.test` and Aqua on 1.14-nightly run on Ubuntu, macOS, and WSL2 on a push, a manual run, or a version increase. `Pkg.test (registry, ubuntu-latest, x64)` runs then too. They continue on error and are not required. JETLS stays on 1.13. `Pkg.test` 1.13 on macOS and WSL2 is required, with Ubuntu.
+Ubuntu `Pkg.test` and Aqua on 1.14-nightly run on a push, a manual run, or a version increase. macOS and WSL2 nightly run on CI weekly only. `Pkg.test (registry, ubuntu-latest, x64)` runs then too. They continue on error and are not required. JETLS stays on 1.13. `Pkg.test` 1.13 on macOS and WSL2 is required, with Ubuntu.
 
 Sunday 10:00 JST, CI weekly repeats the 1.13 checks, including macOS and WSL2, and those nightly jobs. A failure of a 1.13 job opens `CI weekly failed`. Nightly failures do not. That run also drops old Actions caches.
 
