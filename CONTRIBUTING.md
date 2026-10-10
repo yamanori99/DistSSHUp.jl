@@ -27,10 +27,12 @@ julia --project=docs --color=yes docs/make.jl
 
 The `main` ruleset asks for these checks:
 
-- `Pkg.test - 1.13 - ubuntu-latest`
-- `JETLS - 1.13 - ubuntu-latest`
-- `Aqua - 1.13 - ubuntu-latest`
-- `Documenter - 1.13 - ubuntu-latest`
+- `Pkg.test (1.13, ubuntu-latest, x64)`
+- `Pkg.test (1.13, macos-latest, aarch64)`
+- `Pkg.test (1.13, WSL2 ubuntu-24.04, x64)`
+- `JETLS (1.13, ubuntu-latest, x64)`
+- `Aqua (1.13, ubuntu-latest, x64)`
+- `Documenter (1.13, ubuntu-latest, x64)`
 - `Gitleaks`
 - `ubuntu-latest → ubuntu-24.04`
 - `PR label`
@@ -39,9 +41,9 @@ The `main` ruleset asks for these checks:
 
 Runic is not required. Once a month on `main` it opens `Runic monthly failed` if `--check` is red. Codecov status is informational. Flag `pkgtest` uploads from `Pkg.test` on a push to `main` only. Flag `e2e` uploads from Linux E2E on E2E weekly and on a version-increase PR. Ordinary PR E2E does not upload.
 
-`Pkg.test - 1.14-nightly`, `Aqua - 1.14-nightly`, and `Pkg.test - registry tree` run on a push, a manual run, or a version increase. They continue on error and are not required. JETLS stays on 1.13.
+`Pkg.test` and Aqua on 1.14-nightly run on Ubuntu, macOS, and WSL2 on a push, a manual run, or a version increase. `Pkg.test (registry, ubuntu-latest, x64)` runs then too. They continue on error and are not required. JETLS stays on 1.13. `Pkg.test` 1.13 on macOS and WSL2 is required, with Ubuntu.
 
-Sunday 10:00 JST, CI weekly repeats the 1.13 checks and those nightly jobs. A failure of a 1.13 job opens `CI weekly failed`. Nightly failures do not. That run also drops old Actions caches.
+Sunday 10:00 JST, CI weekly repeats the 1.13 checks, including macOS and WSL2, and those nightly jobs. A failure of a 1.13 job opens `CI weekly failed`. Nightly failures do not. That run also drops old Actions caches.
 
 Sunday 04:00 JST, a manual run, or a version increase on `main` builds the worker image and runs the suite on that image from Linux, macOS Intel, and WSL2. Those jobs are not required. The Linux job uploads flag `e2e`. `distsshup-linux-ssh-worker:latest` is published after that Linux suite. A failure opens `E2E weekly failed`. A red Linux job after a version increase adds `cut-hold`. Intel and WSL do not.
 
