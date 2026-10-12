@@ -12,6 +12,8 @@
 [![License](https://img.shields.io/badge/License-MIT-yellow?style=flat-square)](LICENSE)
 <!-- markdownlint-enable MD013 -->
 
+このパッケージは [DistSSHRun](https://github.com/yamanori99/DistSSHRun.jl) に統合する予定。
+
 DistSSHUp は、ホストの Julia チャンネルを juliaup の `add` / `default` / `update` / `status` で揃える。
 
 このパッケージは直接足してよい。[DistSSHKit](https://github.com/yamanori99/DistSSHKit.jl) の利用者は、`julia -m DistSSHKit up` でも同じ揃えができる。
