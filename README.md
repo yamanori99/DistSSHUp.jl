@@ -12,6 +12,8 @@
 [![License](https://img.shields.io/badge/License-MIT-yellow?style=flat-square)](LICENSE)
 <!-- markdownlint-enable MD013 -->
 
+This package will be folded into [DistSSHRun](https://github.com/yamanori99/DistSSHRun.jl).
+
 DistSSHUp aligns a host's Julia channel with juliaup: `add`, `default`, `update`, and `status`.
 
 Add this package directly. [DistSSHKit](https://github.com/yamanori99/DistSSHKit.jl) users can run the same alignment with `julia -m DistSSHKit up`.
